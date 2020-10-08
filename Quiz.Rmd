@@ -1,0 +1,18 @@
+---
+title: "Quiz"
+output: html_document
+---
+
+## Quiz 3
+
+```{r}
+library(AppliedPredictiveModeling)
+data(segmentationOriginal)
+summary(segmentationOriginal)
+library(caret)
+```
+
+```{r}
+
+```
+

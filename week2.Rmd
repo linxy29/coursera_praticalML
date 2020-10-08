@@ -1,0 +1,69 @@
+---
+title: "Week2"
+output: html_document
+---
+
+## Data splitting
+
+```{r}
+library(caret)
+library(kernlab)
+```
+
+Input data
+
+```{r}
+data(spam)
+```
+
+split data to training and testing
+
+```{r}
+inTrain = createDataPartition(y = spam$type, p = 0.75, list = FALSE)
+
+training = spam[inTrain,]
+testing = spam[-inTrain]
+
+dim(training)
+```
+
+split data to K-fold
+
+```{r}
+set.seed(123)
+folds = createFolds(y = spam$type, k = 10, list = TRUE, returnTrain = TRUE) #list: return as a list; returnTrain: return training set instead of test set
+sapply(folds, length)
+```
+
+resampling
+
+```{r}
+set.seed(123)
+folds = createResample(y = spam$type, times = 10, list = TRUE)
+```
+
+time slices
+
+```{r}
+set.seed(123)
+tme = 1:1000
+folds = createTimeSlices(y = tme, initialWindow = 20, horizon = 10) # indicate using first 20 to train and next 10 to test
+
+names(folds)
+folds$train[[1]]
+folds$test[[1]]
+```
+
+## Training options
+
+```{r}
+inTrain = createDataPartition(y = spam$type, p = 0.75, list = FALSE)
+training = spam[inTrain,]
+testing = spam[-inTrain]
+modelFit = train(type ~ ., data = training, method = "glm")
+```
+
+```{r}
+
+```
+
