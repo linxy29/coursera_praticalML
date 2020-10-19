@@ -62,3 +62,99 @@ trainSA = SAheart[train,]
 testSA = SAheart[-train,]
 ```
 
+## Quiz 4
+
+```{r}
+load("./data/vowel.test.RData") 
+vowel.test = vowel.test %>% 
+  mutate(y = as.factor(y))
+head(vowel.test) 
+load("./data/vowel.train.RData") 
+vowel.train = vowel.train %>% 
+  mutate(y = as.factor(y))
+head(vowel.train)
+summary(vowel.train)
+```
+
+```{r}
+set.seed(33833)
+modFit1 = train(y ~., data = vowel.train, method = "rf", prox = TRUE)
+modFit1
+modFit2 = train(y ~., data = vowel.train, method = "gbm")
+modFit2
+```
+
+```{r}
+pred1 = predict(modFit1, vowel.test)
+pred2 = predict(modFit2, vowel.test)
+table(pred1, vowel.test$y)
+table(pred2, vowel.test$y)
+pred_co = pred1[pred1==pred2]
+true = vowel.test$y[pred1==pred2]
+length(pred_co)
+length(true)
+table(pred_co, true)
+```
+
+```{r}
+library(caret)
+library(gbm)
+set.seed(3433)
+library(AppliedPredictiveModeling)
+data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+training = adData[ inTrain,]
+head(training)
+testing = adData[-inTrain,]
+head(testing)
+```
+
+```{r}
+set.seed(62433)
+modFit1 = train(diagnosis ~., data = training, method = "rf", prox = TRUE)
+modFit1
+modFit2 = train(diagnosis ~., data = training, method = "gbm")
+modFit2
+modFit3 = train(diagnosis ~., data = training, method = "lda")
+modFit3
+```
+
+```{r}
+pred1 = predict(modFit1, testing)
+pred2 = predict(modFit2, testing)
+pred3 = predict(modFit3, testing)
+#pred4 = mean(pred1, pred2, pred3)
+table(pred1, testing$diagnosis)
+table(pred2, testing$diagnosis)
+table(pred3, testing$diagnosis)
+```
+
+```{r}
+set.seed(3523)
+library(AppliedPredictiveModeling)
+data(concrete)
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+training = concrete[ inTrain,]
+head(training)
+testing = concrete[-inTrain,]
+```
+
+```{r}
+set.seed(233)
+modFit1 = train(CompressiveStrength ~., data = training, method = "lasso", prox = TRUE)
+modFit1
+```
+
+```{r}
+library(lubridate) # For year() function below
+
+dat = read.csv("~/Desktop/gaData.csv")
+
+training = dat[year(dat$date) < 2012,]
+
+testing = dat[(year(dat$date)) > 2011,]
+
+tstrain = ts(training$visitsTumblr)
+```
+
