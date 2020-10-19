@@ -9,11 +9,12 @@ output: html_document
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(caret)
 ```
 
 ```{r}
-pml.testing <- read.csv("~/R/coursera_praticalML/data/pml-testing.csv")
-pml.training <- read.csv("~/R/coursera_praticalML/data/pml-training.csv")
+pml.testing <- read.csv("./data/pml-testing.csv")
+pml.training <- read.csv("./data/pml-training.csv")
 ```
 
 ```{r, eval=FALSE}
@@ -61,5 +62,6 @@ set.seed(123)
 ctrl1 = trainControl(method = "cv", number = 10)
 lasso.fit = train(x,y, method = "glmnet", tuneGrid = expand.grid(alpha=seq(0.1, 1 ,length = 5), lambda = exp(seq(-1, 5, length = 20))), trControl = ctrl1)
 plot(lasso.fit, xTrans = function(x)log(x))
+saveRDS(lasso.fit, "./data/lasso_fit.rds")
 ```
 
